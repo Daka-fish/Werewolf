@@ -43,5 +43,5 @@ public class GameScoreboard {
     }
 
     public void show(GamePlayer gamePlayer){if(gamePlayer.getPlayer()!=null) gamePlayer.getPlayer().setScoreboard(scoreMap.get(gamePlayer));}
-    public void remove(GamePlayer gamePlayer){if(gamePlayer.getPlayer()==null) gamePlayer.getPlayer().getScoreboard().clearSlot(DisplaySlot.SIDEBAR);}
+    public void remove(GamePlayer gamePlayer){if(gamePlayer.getPlayer()!=null) gamePlayer.getPlayer().getScoreboard().clearSlot(DisplaySlot.SIDEBAR);}
 }

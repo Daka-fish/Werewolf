@@ -2,9 +2,9 @@ package net.tv.twitch.chrono_fish.werewolf.instance;
 
 public enum TimeZone {
     WAITING("§7準備中§f",0,"white"),
-    DAY("昼",10, "white"),
-    VOTE("投票",10,"green"),
-    NIGHT("夜",10,"red");
+    DAY("昼",5, "white"),
+    VOTE("投票",5,"green"),
+    NIGHT("夜",5,"red");
 
     private final String timeName;
     private int time;

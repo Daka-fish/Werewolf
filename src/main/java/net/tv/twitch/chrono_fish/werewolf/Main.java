@@ -8,22 +8,28 @@ import org.bukkit.plugin.java.JavaPlugin;
 public final class Main extends JavaPlugin {
 
     private Game game;
+    private ConfigManager configManager;
 
     @Override
     public void onEnable() {
         this.game = new Game(this);
+        this.configManager = new ConfigManager(this, game);
         getCommand("start").setExecutor(new Commands(this));
         getCommand("add").setExecutor(new Commands(this));
         getCommand("action").setExecutor(new Commands(this));
         getCommand("finish").setExecutor(new Commands(this));
+        getCommand("time").setExecutor(new Commands(this));
+        getCommand("role").setExecutor(new Commands(this));
         Bukkit.getPluginManager().registerEvents(new Events(game),this);
-        new ConfigManager(game).loadOptions();
+        configManager.loadOptions();
     }
 
     @Override
     public void onDisable(){
-
+        configManager.saveOptions();
     }
 
     public Game getGame() {return game;}
+
+    public void consoleLog(String message){getLogger().info(message);}
 }

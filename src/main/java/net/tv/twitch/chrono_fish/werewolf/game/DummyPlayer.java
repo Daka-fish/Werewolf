@@ -21,6 +21,7 @@ public class DummyPlayer extends GamePlayer{
     public String getName() {return name;}
 
     public void vote() {
+        if(!this.isAlive()) return;
         ArrayList<GamePlayer> alivePlayers = new ArrayList<>();
         for (GamePlayer participant : game.getParticipants()) {
             if(participant.isAlive()){
@@ -33,23 +34,19 @@ public class DummyPlayer extends GamePlayer{
         super.setHasVoted(true);
     }
 
-    public void addKillPool() {
-        ArrayList<GamePlayer> targetPool = new ArrayList<>();
-        for (GamePlayer participant : game.getParticipants()) {
-            if(participant.isAlive() && !participant.getRole().equals(Role.WOLF)){
-                targetPool.add(participant);
-            }
-        }
-        Collections.shuffle(targetPool);
-        GamePlayer target = targetPool.get(0);
-        setActionTarget(target);
-        setHasActioned(true);
-    }
-
     public void action(){
         for (DummyPlayer dummyPlayer : game.getDummyPlayers()) {
             if(dummyPlayer.getRole().equals(Role.WOLF)){
-                this.addKillPool();
+                ArrayList<GamePlayer> targetPool = new ArrayList<>();
+                for (GamePlayer participant : game.getParticipants()) {
+                    if(participant.isAlive() && !participant.getRole().equals(Role.WOLF)){
+                        targetPool.add(participant);
+                    }
+                }
+                Collections.shuffle(targetPool);
+                GamePlayer target = targetPool.get(0);
+                setActionTarget(target);
+                setHasActioned(true);
             }
         }
     }

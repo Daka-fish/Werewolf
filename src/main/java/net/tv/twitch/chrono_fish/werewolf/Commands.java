@@ -3,11 +3,15 @@ package net.tv.twitch.chrono_fish.werewolf;
 import net.tv.twitch.chrono_fish.werewolf.game.Game;
 import net.tv.twitch.chrono_fish.werewolf.game.GamePlayer;
 import net.tv.twitch.chrono_fish.werewolf.instance.Action;
+import net.tv.twitch.chrono_fish.werewolf.instance.Role;
+import net.tv.twitch.chrono_fish.werewolf.instance.TimeZone;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
 
 public class Commands implements CommandExecutor {
 
@@ -42,7 +46,77 @@ public class Commands implements CommandExecutor {
                 if(game.getDummyPlayers().size()>0){
                     game.removeCpu();
                 }else{
-                    sender.sendMessage("§cCPUがいません");
+                    gamePlayer.sendMessage("§cCPUがいません");
+                }
+            }
+            if(command.getName().equalsIgnoreCase("time")){
+                if(args.length==0){
+                    sender.sendMessage("[時間設定]");
+                    for (TimeZone timeZone : TimeZone.values()) {
+                        sender.sendMessage(timeZone.getTimeName()+": §e"+timeZone.getTime()+"§f秒");
+                    }
+                }
+                if(args.length==2){
+                    String time = args[0].toUpperCase();
+                    int second = Integer.parseInt(args[1]);
+                    switch(time){
+                        case "DAY":
+                            TimeZone.DAY.setTime(second);
+                            break;
+
+                        case "VOTE":
+                            TimeZone.VOTE.setTime(second);
+                            break;
+
+                        case "NIGHT":
+                            TimeZone.NIGHT.setTime(second);
+                            break;
+
+                        default:
+                            break;
+                    }
+                    sender.sendMessage("§e"+time+"§fの時間を"+"§a"+second+"§f秒に変更しました");
+                }
+            }
+            if(command.getName().equalsIgnoreCase("role")){
+                if(args.length==0){
+                    gamePlayer.sendMessage("[役職一覧]");
+                    Collections.sort(game.getRoles());
+                    for (Role role : game.getRoles()) {
+                        gamePlayer.sendMessage(role.getRoleName());
+                    }
+                }
+                if(args.length==2){
+                    String roleName = args[1].toUpperCase();
+                    try{
+                        Role role = Role.valueOf(roleName);
+                        switch(args[0]){
+                            case "add":
+                                game.addRole(role);
+                                gamePlayer.sendMessage("§e"+role.getRoleName()+"§fを追加しました");
+                                break;
+
+                            case "remove":
+                                game.removeRole(role);
+                                gamePlayer.sendMessage("§e"+role.getRoleName()+"§fを削除しました");
+                                break;
+
+                            case "list":
+                                gamePlayer.sendMessage("[役職一覧]");
+                                Collections.sort(game.getRoles());
+                                for (Role r : game.getRoles()) {
+                                    gamePlayer.sendMessage(r.getRoleName());
+                                }
+                                break;
+
+                            default:
+                                gamePlayer.sendMessage("/role {add, remove, list}");
+                                break;
+                        }
+                    } catch (IllegalArgumentException e) {
+                        gamePlayer.sendMessage("§c役職が見つかりませんでした");
+                        throw new RuntimeException(e);
+                    }
                 }
             }
             if(command.getName().equalsIgnoreCase("action")){

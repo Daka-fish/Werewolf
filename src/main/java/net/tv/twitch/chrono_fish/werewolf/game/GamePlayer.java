@@ -83,12 +83,16 @@ public class GamePlayer {
         if(game.isRunning() && game.getCurrentTime().equals(TimeZone.NIGHT)){
             if(role.equals(Role.WOLF)){
                 if(!gamePlayer.equals(this)){
-                    if(!hasActioned){
-                        setActionTarget(gamePlayer);
-                        setHasActioned(true);
-                        sendMessage("§e"+gamePlayer.getName()+"§fを標的にします");
+                    if(gamePlayer.isAlive()){
+                        if(!hasActioned){
+                            setActionTarget(gamePlayer);
+                            setHasActioned(true);
+                            sendMessage("§e"+gamePlayer.getName()+"§fを標的にします");
+                        }else{
+                            sendMessage("§c既に行動しました");
+                        }
                     }else{
-                        sendMessage("§c既に行動しました");
+                        sendMessage("§c死者を標的にできません");
                     }
                 }else{
                     sendMessage("§c自身を標的にできません");

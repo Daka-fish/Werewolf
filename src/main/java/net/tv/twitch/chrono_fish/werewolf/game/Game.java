@@ -80,11 +80,9 @@ public class Game {
     }
 
     public GameBossBar getGameBossBar() {return gameBossBar;}
-    public GameScoreboard getGameScoreboard() {return gameScoreboard;}
 
     public void join(GamePlayer gamePlayer){
         participants.add(gamePlayer);
-        gameBossBar.showBossBar(gamePlayer);
         sendMessage("§e"+gamePlayer.getName()+"§fが参加しました");
     }
 
@@ -110,6 +108,16 @@ public class Game {
         }
     }
 
+    public void addRole(Role role){
+        roles.add(role);
+        Collections.sort(roles);
+    }
+
+    public void removeRole(Role role){
+        roles.remove(role);
+        Collections.sort(roles);
+    }
+
     public void sendMessage(String message){participants.forEach(gamePlayer -> gamePlayer.sendMessage("[人狼]"+message));}
 
     public GamePlayer getGamePlayer(Player player){
@@ -132,6 +140,14 @@ public class Game {
             if(participant.getRole().getTeam() == teamNumber && participant.isAlive()){
                 count ++;
             }
+        }
+        return count;
+    }
+
+    public int countRole(Role role){
+        int count = 0;
+        for (Role existRole : roles) {
+            if(existRole == role) count ++;
         }
         return count;
     }
@@ -175,7 +191,7 @@ public class Game {
         for (GamePlayer participant : participants) {
             gameBossBar.setBossBar(TimeZone.WAITING);
             gameBossBar.setTime((float) 1);
-            gameBossBar.showBossBar(participant);
+            gameBossBar.hideBossBar(participant);
             gameScoreboard.remove(participant);
             message.append("\n").append(participant.getName()).append(" : ").append(participant.getRole().getRoleName());
         }
