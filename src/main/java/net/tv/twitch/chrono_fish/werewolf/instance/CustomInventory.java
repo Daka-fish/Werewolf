@@ -1,7 +1,6 @@
 package net.tv.twitch.chrono_fish.werewolf.instance;
 
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
 import net.tv.twitch.chrono_fish.werewolf.game.Game;
 import net.tv.twitch.chrono_fish.werewolf.game.GamePlayer;
 import org.bukkit.Bukkit;
@@ -15,17 +14,13 @@ import java.util.ArrayList;
 public class CustomInventory {
 
     private final Game game;
-    private final Component vote;
-    private final Component kill;
 
     public CustomInventory(Game game){
         this.game = game;
-        this.vote = Component.text("Who do you vote?").decorate(TextDecoration.BOLD);
-        this.kill = Component.text("Who do you kill?").decorate(TextDecoration.BOLD);
     }
 
-    public Inventory getInventory(Action action){
-        Inventory inventory = Bukkit.createInventory(null,27, getInventoryTitle(action));
+    public Inventory getActionInventory(Action action){
+        Inventory inventory = Bukkit.createInventory(null,27, action.getInventory_title());
         for (GamePlayer participant : game.getParticipants()) {
             ItemStack head = new ItemStack(Material.PLAYER_HEAD);
             SkullMeta skullMeta = (SkullMeta) head.getItemMeta();
@@ -38,16 +33,5 @@ public class CustomInventory {
             inventory.addItem(head);
         }
         return inventory;
-    }
-
-    public Component getInventoryTitle(Action action){
-        switch (action){
-            case VOTE:
-                return vote;
-
-            case KILL:
-                return kill;
-        }
-        return Component.text("");
     }
 }

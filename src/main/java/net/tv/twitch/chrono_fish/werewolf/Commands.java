@@ -123,11 +123,15 @@ public class Commands implements CommandExecutor {
                 if(args.length>0){
                     switch (args[0]){
                         case "vote":
-                            sender.openInventory(game.getCustomInventory().getInventory(Action.VOTE));
+                            sender.openInventory(game.getCustomInventory().getActionInventory(Action.VOTE));
                             break;
 
                         case "kill":
-                            sender.openInventory(game.getCustomInventory().getInventory(Action.KILL));
+                            sender.openInventory(game.getCustomInventory().getActionInventory(Action.KILL));
+                            break;
+
+                        case "predict":
+                            sender.openInventory(game.getCustomInventory().getActionInventory(Action.PREDICT));
                             break;
                     }
                 }

@@ -47,12 +47,16 @@ public class Events implements Listener {
                 }
             }
             if(target != null){
-                if(e.getView().title().equals(game.getCustomInventory().getInventoryTitle(Action.VOTE))){
+                if(e.getView().title().equals(Action.VOTE.getInventory_title())){
                     gamePlayer.vote(target);
                     gamePlayer.getPlayer().closeInventory();
                 }
-                if(e.getView().title().equals(game.getCustomInventory().getInventoryTitle(Action.KILL))){
+                if(e.getView().title().equals(Action.KILL.getInventory_title())){
                     gamePlayer.addKillPool(target);
+                    gamePlayer.getPlayer().closeInventory();
+                }
+                if(e.getView().title().equals(Action.PREDICT.getInventory_title())){
+                    gamePlayer.predict(target);
                     gamePlayer.getPlayer().closeInventory();
                 }
             }

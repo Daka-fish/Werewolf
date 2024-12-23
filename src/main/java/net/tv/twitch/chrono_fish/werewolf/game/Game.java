@@ -210,6 +210,18 @@ public class Game {
         }
     }
 
+    public void sendActionMessage(GamePlayer gamePlayer){
+        switch(gamePlayer.getRole()){
+            case WOLF:
+                gamePlayer.sendMessage(Component.text("§e"+getDayCount()+"§f日目: ").append(Action.KILL.getText()));
+                break;
+
+            case SEER:
+                gamePlayer.sendMessage(Component.text("§e"+getDayCount()+"§f日目: ").append(Action.PREDICT.getText()));
+                break;
+        }
+    }
+
     public void doTimeEnd(){
         switch (currentTime){
             case DAY:
@@ -228,9 +240,7 @@ public class Game {
                     setCurrentTime(TimeZone.NIGHT);
                     participants.forEach(gamePlayer -> {
                         gamePlayer.setHasActioned(false);
-                        if(gamePlayer.getRole().equals(Role.WOLF)){
-                            gamePlayer.sendMessage(Component.text("§e"+getDayCount()+"§f日目: ").append(Action.KILL.getText()));
-                        }
+                        sendActionMessage(gamePlayer);
                     });
                 }
                 break;

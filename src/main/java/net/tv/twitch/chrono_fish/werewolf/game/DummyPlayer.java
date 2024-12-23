@@ -36,6 +36,7 @@ public class DummyPlayer extends GamePlayer{
 
     public void action(){
         for (DummyPlayer dummyPlayer : game.getDummyPlayers()) {
+            if(!dummyPlayer.isAlive()) return;
             if(dummyPlayer.getRole().equals(Role.WOLF)){
                 ArrayList<GamePlayer> targetPool = new ArrayList<>();
                 for (GamePlayer participant : game.getParticipants()) {
@@ -46,8 +47,19 @@ public class DummyPlayer extends GamePlayer{
                 Collections.shuffle(targetPool);
                 GamePlayer target = targetPool.get(0);
                 setActionTarget(target);
-                setHasActioned(true);
             }
+            if(dummyPlayer.getRole().equals(Role.SEER)){
+                ArrayList<GamePlayer> targetPool = new ArrayList<>();
+                for (GamePlayer participant : game.getParticipants()) {
+                    if(participant.isAlive()){
+                        targetPool.add(participant);
+                    }
+                }
+                Collections.shuffle(targetPool);
+                GamePlayer target = targetPool.get(0);
+                setActionTarget(target);
+            }
+            setHasActioned(true);
         }
     }
 }
