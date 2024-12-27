@@ -219,6 +219,10 @@ public class Game {
             case SEER:
                 gamePlayer.sendMessage(Component.text("§e"+getDayCount()+"§f日目: ").append(Action.PREDICT.getText()));
                 break;
+
+            case MEDIUM:
+                gamePlayer.sendMessage(Component.text("§e"+getDayCount()+"§f日目: ").append(Action.SEE_DEAD.getText()));
+                break;
         }
     }
 
@@ -226,10 +230,7 @@ public class Game {
         switch (currentTime){
             case DAY:
                 setCurrentTime(TimeZone.VOTE);
-                participants.forEach(gamePlayer -> {
-                    gamePlayer.setHasVoted(false);
-                    gamePlayer.sendMessage(Component.text("§e"+getDayCount()+"§f日目: ").append(Action.VOTE.getText()));
-                });
+                participants.forEach(gamePlayer -> gamePlayer.sendMessage(Component.text("§e"+getDayCount()+"§f日目: ").append(Action.VOTE.getText())));
                 dummyPlayers.forEach(DummyPlayer::vote);
                 break;
 
@@ -238,10 +239,7 @@ public class Game {
                 checkWin();
                 if(isRunning){
                     setCurrentTime(TimeZone.NIGHT);
-                    participants.forEach(gamePlayer -> {
-                        gamePlayer.setHasActioned(false);
-                        sendActionMessage(gamePlayer);
-                    });
+                    participants.forEach(this::sendActionMessage);
                 }
                 break;
 
@@ -253,6 +251,11 @@ public class Game {
                 checkWin();
                 setCurrentTime(TimeZone.DAY);
                 setDayCount(getDayCount()+1);
+                participants.forEach(gamePlayer -> {
+                    gamePlayer.setHasVoted(false);
+                    gamePlayer.setVoteCount(0);
+                    gamePlayer.setHasActioned(false);
+                });
                 break;
         }
         if(isRunning){

@@ -2,6 +2,7 @@ name: Werewolf
 version: '${project.version}'
 main: net.tv.twitch.chrono_fish.werewolf.Main
 api-version: '1.20'
+description: "werewolf v1.0 !!!!!"
 commands:
   start:
   finish:

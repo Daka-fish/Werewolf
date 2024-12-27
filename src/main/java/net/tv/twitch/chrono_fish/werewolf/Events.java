@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.ItemStack;
@@ -59,7 +60,16 @@ public class Events implements Listener {
                     gamePlayer.predict(target);
                     gamePlayer.getPlayer().closeInventory();
                 }
+                if(e.getView().title().equals(Action.SEE_DEAD.getInventory_title())){
+                    gamePlayer.see(target);
+                    gamePlayer.getPlayer().closeInventory();
+                }
             }
         }
+    }
+
+    @EventHandler
+    public void onInteract(PlayerInteractEvent e){
+
     }
 }

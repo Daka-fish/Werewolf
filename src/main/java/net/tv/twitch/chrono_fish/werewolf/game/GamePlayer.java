@@ -130,4 +130,30 @@ public class GamePlayer {
             sendMessage("§c今は行えません");
         }
     }
+
+    public void see(GamePlayer gamePlayer){
+        if(game.isRunning() && game.getCurrentTime().equals(TimeZone.NIGHT)){
+            if(role.equals(Role.MEDIUM)){
+                if(!gamePlayer.equals(this)){
+                    if(!gamePlayer.isAlive()){
+                        if(!hasActioned){
+                            setActionTarget(gamePlayer);
+                            setHasActioned(true);
+                            sendMessage("§e"+gamePlayer.getName()+"§fは"+((gamePlayer.getRole().getTeam()!=1) ? "§e白" : "§c黒")+"§fです");
+                        }else{
+                            sendMessage("§c既に行動しました");
+                        }
+                    }else{
+                        sendMessage("§c生存者を見ることはできません");
+                    }
+                }else{
+                    sendMessage("§c自身を見ることはできません");
+                }
+            }else{
+                sendMessage("§cあなたは行えません");
+            }
+        }else{
+            sendMessage("§c今は行えません");
+        }
+    }
 }

@@ -73,7 +73,8 @@ public class Commands implements CommandExecutor {
                             break;
 
                         default:
-                            break;
+                            sender.sendMessage("§c有効な時間ではありません("+time+")");
+                            return false;
                     }
                     sender.sendMessage("§e"+time+"§fの時間を"+"§a"+second+"§f秒に変更しました");
                 }
@@ -132,6 +133,10 @@ public class Commands implements CommandExecutor {
 
                         case "predict":
                             sender.openInventory(game.getCustomInventory().getActionInventory(Action.PREDICT));
+                            break;
+
+                        case "see_dead":
+                            sender.openInventory(game.getCustomInventory().getActionInventory(Action.SEE_DEAD));
                             break;
                     }
                 }
