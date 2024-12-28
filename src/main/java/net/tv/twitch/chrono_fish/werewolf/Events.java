@@ -64,6 +64,14 @@ public class Events implements Listener {
                     gamePlayer.see(target);
                     gamePlayer.getPlayer().closeInventory();
                 }
+                if(e.getView().title().equals(Action.SEE_DEAD.getInventory_title())){
+                    gamePlayer.see(target);
+                    gamePlayer.getPlayer().closeInventory();
+                }
+                if(e.getView().title().equals(Action.PROTECT.getInventory_title())){
+                    gamePlayer.protect(target);
+                    gamePlayer.getPlayer().closeInventory();
+                }
             }
         }
     }

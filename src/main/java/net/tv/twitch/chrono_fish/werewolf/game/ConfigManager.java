@@ -60,11 +60,10 @@ public class ConfigManager {
                 }
             }
         }
-        main.consoleLog("save game options from config.yml");
+        main.consoleLog("load game options from config.yml");
     }
 
     public void saveOptions(){
-        //save role information for if(role=role){set(get()+1)}
         for (Role role : Role.values()) {
             config.set("game.roles."+role.name().toLowerCase(), game.countRole(role));
         }
@@ -73,5 +72,6 @@ public class ConfigManager {
             config.set("game.times."+timeZone.name().toLowerCase(),timeZone.getTime());
         }
         main.saveConfig();
+        main.consoleLog("save game options from config.yml");
     }
 }

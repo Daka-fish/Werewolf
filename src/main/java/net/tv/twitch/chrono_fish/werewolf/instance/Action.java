@@ -18,7 +18,7 @@ public enum Action {
             .clickEvent(ClickEvent.runCommand("/action see_dead")),
             Component.text("Who do you see?").decorate(TextDecoration.BOLD)),
     PROTECT(Component.text("守る").decorate(TextDecoration.UNDERLINED)
-            .clickEvent(ClickEvent.runCommand("/action see_dead")),
+            .clickEvent(ClickEvent.runCommand("/action protect")),
             Component.text("Who do you protect?").decorate(TextDecoration.BOLD));
 
     private final Component text;

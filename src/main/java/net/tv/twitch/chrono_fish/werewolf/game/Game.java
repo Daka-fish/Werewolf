@@ -211,6 +211,7 @@ public class Game {
     }
 
     public void sendActionMessage(GamePlayer gamePlayer){
+        if(!gamePlayer.isAlive()) return;
         switch(gamePlayer.getRole()){
             case WOLF:
                 gamePlayer.sendMessage(Component.text("§e"+getDayCount()+"§f日目: ").append(Action.KILL.getText()));
@@ -234,7 +235,9 @@ public class Game {
         switch (currentTime){
             case DAY:
                 setCurrentTime(TimeZone.VOTE);
-                participants.forEach(gamePlayer -> gamePlayer.sendMessage(Component.text("§e"+getDayCount()+"§f日目: ").append(Action.VOTE.getText())));
+                participants.forEach(gamePlayer -> {
+                    if(gamePlayer.isAlive()) gamePlayer.sendMessage(Component.text("§e"+getDayCount()+"§f日目: ").append(Action.VOTE.getText()));
+                });
                 dummyPlayers.forEach(DummyPlayer::vote);
                 break;
 
@@ -255,6 +258,7 @@ public class Game {
                 checkWin();
                 setCurrentTime(TimeZone.DAY);
                 setDayCount(getDayCount()+1);
+
                 participants.forEach(gamePlayer -> {
                     gamePlayer.setHasVoted(false);
                     gamePlayer.setVoteCount(0);

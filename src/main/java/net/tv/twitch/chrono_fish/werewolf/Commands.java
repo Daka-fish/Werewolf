@@ -138,6 +138,10 @@ public class Commands implements CommandExecutor {
                         case "see_dead":
                             sender.openInventory(game.getCustomInventory().getActionInventory(Action.SEE_DEAD));
                             break;
+
+                        case "protect":
+                            sender.openInventory(game.getCustomInventory().getActionInventory(Action.PROTECT));
+                            break;
                     }
                 }
             }
