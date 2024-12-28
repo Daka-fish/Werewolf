@@ -1,9 +1,11 @@
 game:
   roles:
-    innocent: 3
-    wolf : 1
+    innocent: 2
+    wolf : 2
     seer: 1
     medium: 1
+    knight: 1
+    crazy: 1
   times:
     waiting: 0
     day: 10

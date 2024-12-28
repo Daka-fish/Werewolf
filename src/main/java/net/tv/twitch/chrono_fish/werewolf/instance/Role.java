@@ -5,7 +5,10 @@ public enum Role {
     INNOCENT("市民",0),
     WOLF("人狼",1),
     SEER("占い師",0),
-    MEDIUM("霊媒師",0);
+    MEDIUM("霊媒師",0),
+
+    KNIGHT("騎士",0),
+    CRAZY("狂人",1);
 
     private final String roleName;
     private final int team;

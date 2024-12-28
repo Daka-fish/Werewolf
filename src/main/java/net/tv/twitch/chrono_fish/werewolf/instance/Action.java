@@ -16,7 +16,10 @@ public enum Action {
             Component.text("Who do you predict?").decorate(TextDecoration.BOLD)),
     SEE_DEAD(Component.text("死体を見る").decorate(TextDecoration.UNDERLINED)
             .clickEvent(ClickEvent.runCommand("/action see_dead")),
-            Component.text("Who do you see?").decorate(TextDecoration.BOLD));
+            Component.text("Who do you see?").decorate(TextDecoration.BOLD)),
+    PROTECT(Component.text("守る").decorate(TextDecoration.UNDERLINED)
+            .clickEvent(ClickEvent.runCommand("/action see_dead")),
+            Component.text("Who do you protect?").decorate(TextDecoration.BOLD));
 
     private final Component text;
     private final Component inventory_title;

@@ -223,6 +223,10 @@ public class Game {
             case MEDIUM:
                 gamePlayer.sendMessage(Component.text("§e"+getDayCount()+"§f日目: ").append(Action.SEE_DEAD.getText()));
                 break;
+
+            case KNIGHT:
+                gamePlayer.sendMessage(Component.text("§e"+getDayCount()+"§f日目: ").append(Action.PROTECT.getText()));
+                break;
         }
     }
 
@@ -255,6 +259,7 @@ public class Game {
                     gamePlayer.setHasVoted(false);
                     gamePlayer.setVoteCount(0);
                     gamePlayer.setHasActioned(false);
+                    gamePlayer.setProtected(false);
                 });
                 break;
         }
@@ -298,9 +303,11 @@ public class Game {
         }
         Collections.shuffle(targets);
         GamePlayer gamePlayer = targets.get(0);
-        if(gamePlayer!=null){
+        if(gamePlayer!=null && !gamePlayer.isProtected()){
             gamePlayer.setAlive(false);
             sendMessage("§e"+gamePlayer.getName()+"§cが何者かによって殺害された");
+        }else{
+            sendMessage("§a昨晩の犠牲者はいなかった");
         }
     }
 }

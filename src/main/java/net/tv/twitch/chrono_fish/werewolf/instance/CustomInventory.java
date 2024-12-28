@@ -15,9 +15,7 @@ public class CustomInventory {
 
     private final Game game;
 
-    public CustomInventory(Game game){
-        this.game = game;
-    }
+    public CustomInventory(Game game){this.game = game;}
 
     public Inventory getActionInventory(Action action){
         Inventory inventory = Bukkit.createInventory(null,27, action.getInventory_title());

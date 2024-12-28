@@ -70,6 +70,24 @@ public class Events implements Listener {
 
     @EventHandler
     public void onInteract(PlayerInteractEvent e){
+        GamePlayer gamePlayer = game.getGamePlayer(e.getPlayer());
+        if(gamePlayer != null && e.getItem()!=null){
+            switch(e.getItem().getType()){
+                case PAPER:
+                    gamePlayer.openInventory(game.getCustomInventory().getActionInventory(Action.VOTE));
+                    break;
 
+                case NETHERITE_AXE:
+                    gamePlayer.openInventory(game.getCustomInventory().getActionInventory(Action.KILL));
+                    break;
+
+                case HEART_OF_THE_SEA:
+                    gamePlayer.openInventory(game.getCustomInventory().getActionInventory(Action.PREDICT));
+
+                case WOODEN_SHOVEL:
+                    gamePlayer.openInventory(game.getCustomInventory().getActionInventory(Action.SEE_DEAD));
+                    break;
+            }
+        }
     }
 }

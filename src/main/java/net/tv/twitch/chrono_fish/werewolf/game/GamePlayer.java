@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.tv.twitch.chrono_fish.werewolf.instance.Role;
 import net.tv.twitch.chrono_fish.werewolf.instance.TimeZone;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 
 public class GamePlayer {
 
@@ -14,6 +15,7 @@ public class GamePlayer {
     private boolean isAlive;
     private boolean hasVoted;
     private boolean hasActioned;
+    private boolean isProtected;
 
     private int voteCount;
     private GamePlayer actionTarget;
@@ -48,6 +50,9 @@ public class GamePlayer {
     public boolean isHasActioned() {return hasActioned;}
     public void setHasActioned(boolean hasActioned) {this.hasActioned = hasActioned;}
 
+    public boolean isProtected() {return isProtected;}
+    public void setProtected(boolean aProtected) {isProtected = aProtected;}
+
     public int getVoteCount() {return voteCount;}
     public void setVoteCount(int voteCount) {this.voteCount = voteCount;}
 
@@ -56,6 +61,8 @@ public class GamePlayer {
 
     public void sendMessage(String message){if(player != null)player.sendMessage(message);}
     public void sendMessage(Component message){if(player != null)player.sendMessage(message);}
+
+    public void openInventory(Inventory inventory){if(player!=null)player.openInventory(inventory);}
 
     public void vote(GamePlayer gamePlayer){
         if(game.isRunning() && this.game.getCurrentTime().equals(TimeZone.VOTE)){
@@ -148,6 +155,36 @@ public class GamePlayer {
                     }
                 }else{
                     sendMessage("§c自身を見ることはできません");
+                }
+            }else{
+                sendMessage("§cあなたは行えません");
+            }
+        }else{
+            sendMessage("§c今は行えません");
+        }
+    }
+
+    public void protect(GamePlayer gamePlayer){
+        if(game.isRunning() && game.getCurrentTime().equals(TimeZone.NIGHT)){
+            if(role.equals(Role.KNIGHT)){
+                if(!gamePlayer.equals(this)){
+                    if(gamePlayer.isAlive()){
+                        if(!gamePlayer.equals(actionTarget)){
+                            if(!hasActioned){
+                                setActionTarget(gamePlayer);
+                                setHasActioned(true);
+                                sendMessage("§e"+gamePlayer.getName()+"§fを守ります");
+                            }else{
+                                sendMessage("§c既に行動しました");
+                            }
+                        }else{
+                               sendMessage("§c昨夜と同じ人を守ることはできません");
+                        }
+                    }else{
+                        sendMessage("§c死者を守ることはできません");
+                    }
+                }else{
+                    sendMessage("§c自身を守ることはできません");
                 }
             }else{
                 sendMessage("§cあなたは行えません");
