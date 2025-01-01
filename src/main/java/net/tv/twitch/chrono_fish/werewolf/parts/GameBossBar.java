@@ -1,8 +1,9 @@
-package net.tv.twitch.chrono_fish.werewolf.instance;
+package net.tv.twitch.chrono_fish.werewolf.parts;
 
 import net.kyori.adventure.bossbar.BossBar;
 import net.kyori.adventure.text.Component;
 import net.tv.twitch.chrono_fish.werewolf.game.GamePlayer;
+import net.tv.twitch.chrono_fish.werewolf.instance.TimeZone;
 
 
 public class GameBossBar {

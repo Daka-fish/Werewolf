@@ -25,9 +25,7 @@ public final class Main extends JavaPlugin {
     }
 
     @Override
-    public void onDisable(){
-        configManager.saveOptions();
-    }
+    public void onDisable(){configManager.saveOptions();}
 
     public Game getGame() {return game;}
 

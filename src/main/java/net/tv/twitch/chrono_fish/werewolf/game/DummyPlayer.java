@@ -31,6 +31,7 @@ public class DummyPlayer extends GamePlayer{
         Random rand = new Random();
         GamePlayer target = alivePlayers.get(rand.nextInt(alivePlayers.size()));
         target.setVoteCount(target.getVoteCount()+1);
+        game.getMain().consoleLog("Day "+game.getDayCount()+": "+name+" vote to "+target.getName());
         super.setHasVoted(true);
     }
 

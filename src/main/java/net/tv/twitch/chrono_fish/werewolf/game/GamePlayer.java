@@ -42,7 +42,10 @@ public class GamePlayer {
     }
 
     public boolean isAlive() {return isAlive;}
-    public void setAlive(boolean alive) {isAlive = alive;}
+    public void setAlive(boolean alive) {
+        this.isAlive = alive;
+        if(!isAlive){sendMessage("§cあなたは死亡しました");}
+    }
 
     public boolean isHasVoted() {return hasVoted;}
     public void setHasVoted(boolean hasVoted) {this.hasVoted = hasVoted;}

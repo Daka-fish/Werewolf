@@ -24,7 +24,7 @@ public class Commands implements CommandExecutor {
 
     @Override
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] args) {
-        if(commandSender instanceof Player && game.isJoined((Player) commandSender)){
+        if(commandSender instanceof Player && game.getGamePlayer((Player) commandSender)!=null){
             Player sender = (Player) commandSender;
             GamePlayer gamePlayer = game.getGamePlayer(sender);
             if(command.getName().equalsIgnoreCase("start")){
@@ -38,9 +38,7 @@ public class Commands implements CommandExecutor {
                 }
             }
             if(command.getName().equalsIgnoreCase("add")){
-                if(game.isJoined(sender)){
-                    game.addCpu();
-                }
+                game.addCpu();
             }
             if(command.getName().equalsIgnoreCase("remove")){
                 if(game.getDummyPlayers().size()>0){

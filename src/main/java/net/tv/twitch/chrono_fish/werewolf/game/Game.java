@@ -3,6 +3,9 @@ package net.tv.twitch.chrono_fish.werewolf.game;
 import net.kyori.adventure.text.Component;
 import net.tv.twitch.chrono_fish.werewolf.Main;
 import net.tv.twitch.chrono_fish.werewolf.instance.*;
+import net.tv.twitch.chrono_fish.werewolf.parts.CustomInventory;
+import net.tv.twitch.chrono_fish.werewolf.parts.GameBossBar;
+import net.tv.twitch.chrono_fish.werewolf.parts.GameScoreboard;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -40,6 +43,8 @@ public class Game {
         gameScoreboard = new GameScoreboard();
         gameBossBar.setBossBar(currentTime);
     }
+
+    public Main getMain() {return main;}
 
     public CustomInventory getCustomInventory() {return customInventory;}
 
@@ -127,13 +132,6 @@ public class Game {
         return null;
     }
 
-    public boolean isJoined(Player player){
-        for (GamePlayer participant : participants) {
-            if(participant.getPlayer().equals(player)) return true;
-        }
-        return false;
-    }
-
     public int countTeam(int teamNumber){
         int count=0;
         for (GamePlayer participant : participants) {
@@ -201,11 +199,11 @@ public class Game {
     public void checkWin(){
         int white = countTeam(0);
         int black = countTeam(1);
-        if(black>=white){
+        if(black==0){
             finish();
             return;
         }
-        if(black==0){
+        if(black>=white){
             finish();
         }
     }
@@ -287,31 +285,45 @@ public class Game {
     }
 
     public void kickMostVoted(){
+        ArrayList<GamePlayer> players = new ArrayList<>(participants);
         GamePlayer target = null;
         int maxVoted = 0;
-        for (GamePlayer participant : participants) {
-            if(participant.getVoteCount()>maxVoted) target = participant;
+        Collections.shuffle(players);
+        for (GamePlayer participant : players) {
+            main.consoleLog("[Vote] "+participant.getName()+" has "+participant.getVoteCount()+" votes");
+            if(participant.getVoteCount()>maxVoted){
+                target = participant;
+                maxVoted = participant.getVoteCount();
+            }
         }
         if(target != null){
             target.setAlive(false);
             sendMessage("§e"+target.getName()+"§fが追放された");
+            main.consoleLog("Day "+dayCount+": "+target.getName()+" has been kicked");
         }
     }
 
     public void kill(){
         ArrayList<GamePlayer> targets = new ArrayList<>();
         for (GamePlayer participant : participants) {
-            if(participant.getRole().equals(Role.WOLF)){
+            if(participant.getRole().equals(Role.WOLF) && participant.isAlive() && participant.getActionTarget().isAlive()){
                 targets.add(participant.getActionTarget());
             }
         }
         Collections.shuffle(targets);
-        GamePlayer gamePlayer = targets.get(0);
-        if(gamePlayer!=null && !gamePlayer.isProtected()){
-            gamePlayer.setAlive(false);
-            sendMessage("§e"+gamePlayer.getName()+"§cが何者かによって殺害された");
+        if(targets.size()>0){
+            GamePlayer gamePlayer = targets.get(0);
+            if(gamePlayer!=null && !gamePlayer.isProtected()){
+                gamePlayer.setAlive(false);
+                sendMessage("§e"+gamePlayer.getName()+"§cが何者かによって殺害された");
+                main.consoleLog("Day "+dayCount+": "+gamePlayer.getName()+" has been killed by someone");
+            }else{
+                sendMessage("§a昨晩の犠牲者はいなかった");
+                main.consoleLog("Day "+dayCount+": no one has been killed tonight");
+            }
         }else{
             sendMessage("§a昨晩の犠牲者はいなかった");
+            main.consoleLog("Day "+dayCount+": no one has been killed tonight");
         }
     }
 }
