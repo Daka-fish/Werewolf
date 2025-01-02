@@ -76,7 +76,7 @@ public class GamePlayer {
                 if(!gamePlayer.equals(this)){
                     if(gamePlayer.isAlive()){
                         gamePlayer.setVoteCount(gamePlayer.getVoteCount()+1);
-                        sendActionBar("§e"+gamePlayer.getName()+"§fに投票しました");
+                        sendMessage("§e"+gamePlayer.getName()+"§fに投票しました");
                         setHasVoted(true);
                     }else{
                         sendActionBar("§c死亡者には投票できません");
