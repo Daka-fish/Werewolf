@@ -29,6 +29,8 @@ public class Game {
     private final GameBossBar gameBossBar;
     private final GameScoreboard gameScoreboard;
 
+    private int winner_team;
+
     public Game(Main main){
         this.main = main;
         this.customInventory = new CustomInventory(this);
@@ -51,11 +53,7 @@ public class Game {
     public boolean isRunning() {return isRunning;}
     public void setRunning(boolean running) {
         isRunning = running;
-        if(isRunning){
-            sendMessage("ゲームが開始しました");
-        }else{
-            sendMessage("ゲームが終了しました");
-        }
+        if(isRunning) sendMessage("ゲームが開始しました");
     }
 
     public ArrayList<GamePlayer> getParticipants() {return participants;}
@@ -182,6 +180,15 @@ public class Game {
     }
 
     public void finish(){
+        switch(winner_team){
+            case 0:
+                sendMessage("§a市民の勝利！");
+                break;
+
+            case 1:
+                sendMessage("§c人狼の勝利！");
+                break;
+        }
         setRunning(false);
         setCurrentTime(TimeZone.WAITING);
         timer.cancel();
@@ -191,7 +198,10 @@ public class Game {
             gameBossBar.setTime((float) 1);
             gameBossBar.hideBossBar(participant);
             gameScoreboard.remove(participant);
-            message.append("\n").append(participant.getName()).append(" : ").append(participant.getRole().getRoleName());
+            message.append("\n")
+                    .append(participant.getName())
+                    .append(" : ")
+                    .append(participant.getRole().getRoleName());
         }
         sendMessage("役職一覧"+ message);
     }
@@ -200,10 +210,12 @@ public class Game {
         int white = countTeam(0);
         int black = countTeam(1);
         if(black==0){
+            winner_team=0;
             finish();
             return;
         }
         if(black>=white){
+            winner_team=1;
             finish();
         }
     }
@@ -246,12 +258,12 @@ public class Game {
                     setCurrentTime(TimeZone.NIGHT);
                     getAlivePlayers().forEach(this::sendActionMessage);
                 }
-                break;
-
-            case NIGHT:
                 main.consoleLog("=====ACTION=====");
                 dummyPlayers.forEach(DummyPlayer::action);
                 main.consoleLog("==========");
+                break;
+
+            case NIGHT:
                 if(getDayCount()!=0){
                     kill();
                 }

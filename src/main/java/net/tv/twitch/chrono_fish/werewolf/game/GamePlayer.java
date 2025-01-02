@@ -65,6 +65,9 @@ public class GamePlayer {
     public void sendMessage(String message){if(player != null)player.sendMessage(message);}
     public void sendMessage(Component message){if(player != null)player.sendMessage(message);}
 
+    //どこで使うか決める
+    public void sendActionBar(String message){if(player!=null)player.sendActionBar(Component.text(message));}
+
     public void openInventory(Inventory inventory){if(player!=null)player.openInventory(inventory);}
 
     public void vote(GamePlayer gamePlayer){
@@ -73,19 +76,19 @@ public class GamePlayer {
                 if(!gamePlayer.equals(this)){
                     if(gamePlayer.isAlive()){
                         gamePlayer.setVoteCount(gamePlayer.getVoteCount()+1);
-                        sendMessage("§e"+gamePlayer.getName()+"§fに投票しました");
+                        sendActionBar("§e"+gamePlayer.getName()+"§fに投票しました");
                         setHasVoted(true);
                     }else{
-                        sendMessage("§c死亡者には投票できません");
+                        sendActionBar("§c死亡者には投票できません");
                     }
                 }else{
-                    sendMessage("§c自身には投票できません");
+                    sendActionBar("§c自身には投票できません");
                 }
             }else{
-                sendMessage("§c既に投票しています");
+                sendActionBar("§c既に投票しています");
             }
         }else{
-            sendMessage("§c今は投票できません");
+            sendActionBar("§c今は投票できません");
         }
     }
 
@@ -99,19 +102,19 @@ public class GamePlayer {
                             setHasActioned(true);
                             sendMessage("§e"+gamePlayer.getName()+"§fを標的にします");
                         }else{
-                            sendMessage("§c既に行動しました");
+                            sendActionBar("§c既に行動しました");
                         }
                     }else{
-                        sendMessage("§c死者を標的にできません");
+                        sendActionBar("§c死者を標的にできません");
                     }
                 }else{
-                    sendMessage("§c自身を標的にできません");
+                    sendActionBar("§c自身を標的にできません");
                 }
             }else{
-                sendMessage("§cあなたは行えません");
+                sendActionBar("§cあなたは行えません");
             }
         }else{
-            sendMessage("§c今は行えません");
+            sendActionBar("§c今は行えません");
         }
     }
 
@@ -125,19 +128,19 @@ public class GamePlayer {
                             setHasActioned(true);
                             sendMessage("§e"+gamePlayer.getName()+"§fは"+((gamePlayer.getRole().getTeam()!=1) ? "§e白" : "§c黒")+"§fです");
                         }else{
-                            sendMessage("§c既に行動しました");
+                            sendActionBar("§c既に行動しました");
                         }
                     }else{
-                        sendMessage("§c死者を占うことはできません");
+                        sendActionBar("§c死者を占うことはできません");
                     }
                 }else{
-                    sendMessage("§c自身を占うことはできません");
+                    sendActionBar("§c自身を占うことはできません");
                 }
             }else{
-                sendMessage("§cあなたは行えません");
+                sendActionBar("§cあなたは行えません");
             }
         }else{
-            sendMessage("§c今は行えません");
+            sendActionBar("§c今は行えません");
         }
     }
 
@@ -151,19 +154,19 @@ public class GamePlayer {
                             setHasActioned(true);
                             sendMessage("§e"+gamePlayer.getName()+"§fは"+((gamePlayer.getRole().getTeam()!=1) ? "§e白" : "§c黒")+"§fです");
                         }else{
-                            sendMessage("§c既に行動しました");
+                            sendActionBar("§c既に行動しました");
                         }
                     }else{
-                        sendMessage("§c生存者を見ることはできません");
+                        sendActionBar("§c生存者を見ることはできません");
                     }
                 }else{
-                    sendMessage("§c自身を見ることはできません");
+                    sendActionBar("§c自身を見ることはできません");
                 }
             }else{
-                sendMessage("§cあなたは行えません");
+                sendActionBar("§cあなたは行えません");
             }
         }else{
-            sendMessage("§c今は行えません");
+            sendActionBar("§c今は行えません");
         }
     }
 
@@ -178,22 +181,22 @@ public class GamePlayer {
                                 setHasActioned(true);
                                 sendMessage("§e"+gamePlayer.getName()+"§fを守ります");
                             }else{
-                                sendMessage("§c既に行動しました");
+                                sendActionBar("§c既に行動しました");
                             }
                         }else{
-                               sendMessage("§c昨夜と同じ人を守ることはできません");
+                               sendActionBar("§c昨夜と同じ人を守ることはできません");
                         }
                     }else{
-                        sendMessage("§c死者を守ることはできません");
+                        sendActionBar("§c死者を守ることはできません");
                     }
                 }else{
-                    sendMessage("§c自身を守ることはできません");
+                    sendActionBar("§c自身を守ることはできません");
                 }
             }else{
-                sendMessage("§cあなたは行えません");
+                sendActionBar("§cあなたは行えません");
             }
         }else{
-            sendMessage("§c今は行えません");
+            sendActionBar("§c今は行えません");
         }
     }
 }
