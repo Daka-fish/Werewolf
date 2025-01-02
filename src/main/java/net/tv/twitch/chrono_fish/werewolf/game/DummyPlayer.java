@@ -1,13 +1,14 @@
 package net.tv.twitch.chrono_fish.werewolf.game;
 
+import net.tv.twitch.chrono_fish.werewolf.Main;
 import net.tv.twitch.chrono_fish.werewolf.instance.Role;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Random;
 
 public class DummyPlayer extends GamePlayer{
 
+    private final Main main;
     private final Game game;
     private final String name;
 
@@ -15,42 +16,51 @@ public class DummyPlayer extends GamePlayer{
         super();
         this.game = game;
         this.name = name;
+        this.main = game.getMain();
     }
 
     @Override
     public String getName() {return name;}
 
+    public void action(){
+        if(!isAlive()) return;
+        switch (this.getRole()){
+            case WOLF:
+                this.addKillPool();
+                break;
+        }
+    }
+
     public void vote() {
         if(!this.isAlive()) return;
         ArrayList<GamePlayer> alivePlayers = new ArrayList<>();
-        for (GamePlayer participant : game.getParticipants()) {
-            if(participant.isAlive()){
+        for (GamePlayer participant : game.getAlivePlayers()) {
+            if(!participant.equals(this)){
                 alivePlayers.add(participant);
             }
         }
-        Random rand = new Random();
-        GamePlayer target = alivePlayers.get(rand.nextInt(alivePlayers.size()));
+        Collections.shuffle(alivePlayers);
+        GamePlayer target = alivePlayers.get(0);
         target.setVoteCount(target.getVoteCount()+1);
-        game.getMain().consoleLog("Day "+game.getDayCount()+": "+name+" vote to "+target.getName());
+        main.consoleLog("Day "+game.getDayCount()+": "+name+" vote to "+target.getName());
         super.setHasVoted(true);
     }
 
-    public void action(){
-        for (DummyPlayer dummyPlayer : game.getDummyPlayers()) {
-            if(!dummyPlayer.isAlive()) return;
-            if(dummyPlayer.getRole().equals(Role.WOLF)){
-                setActionTarget(null);
-                ArrayList<GamePlayer> targetPool = new ArrayList<>();
-                for (GamePlayer participant : game.getParticipants()) {
-                    if(participant.isAlive() && !participant.getRole().equals(Role.WOLF)){
-                        targetPool.add(participant);
-                    }
-                }
-                Collections.shuffle(targetPool);
-                GamePlayer target = targetPool.get(0);
-                setActionTarget(target);
+    public void addKillPool() {
+        setActionTarget(null);
+        ArrayList<GamePlayer> pool = new ArrayList<>();
+        GamePlayer target = null;
+        for (GamePlayer participant : game.getAlivePlayers()) {
+            if(!participant.equals(this) && !participant.getRole().equals(Role.WOLF)){
+                pool.add(participant);
             }
-            setHasActioned(true);
         }
+        Collections.shuffle(pool);
+        if(pool.size()>0){
+            target = pool.get(0);
+            setActionTarget(target);
+        }
+        main.consoleLog("Day "+game.getDayCount()+": "+name+"'s target is "+((target != null) ? target.getName() : "---"));
+        setHasActioned(true);
     }
 }

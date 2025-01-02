@@ -134,8 +134,8 @@ public class Game {
 
     public int countTeam(int teamNumber){
         int count=0;
-        for (GamePlayer participant : participants) {
-            if(participant.getRole().getTeam() == teamNumber && participant.isAlive()){
+        for (GamePlayer participant : getAlivePlayers()) {
+            if(participant.getRole().getTeam() == teamNumber){
                 count ++;
             }
         }
@@ -233,10 +233,10 @@ public class Game {
         switch (currentTime){
             case DAY:
                 setCurrentTime(TimeZone.VOTE);
-                participants.forEach(gamePlayer -> {
-                    if(gamePlayer.isAlive()) gamePlayer.sendMessage(Component.text("§e"+getDayCount()+"§f日目: ").append(Action.VOTE.getText()));
-                });
+                getAlivePlayers().forEach(gamePlayer -> gamePlayer.sendMessage(Component.text("§e"+getDayCount()+"§f日目: ").append(Action.VOTE.getText())));
+                main.consoleLog("=====CPU VOTE=====");
                 dummyPlayers.forEach(DummyPlayer::vote);
+                main.consoleLog("==========");
                 break;
 
             case VOTE:
@@ -244,12 +244,14 @@ public class Game {
                 checkWin();
                 if(isRunning){
                     setCurrentTime(TimeZone.NIGHT);
-                    participants.forEach(this::sendActionMessage);
+                    getAlivePlayers().forEach(this::sendActionMessage);
                 }
                 break;
 
             case NIGHT:
+                main.consoleLog("=====ACTION=====");
                 dummyPlayers.forEach(DummyPlayer::action);
+                main.consoleLog("==========");
                 if(getDayCount()!=0){
                     kill();
                 }
@@ -285,10 +287,11 @@ public class Game {
     }
 
     public void kickMostVoted(){
-        ArrayList<GamePlayer> players = new ArrayList<>(participants);
+        ArrayList<GamePlayer> players = getAlivePlayers();
         GamePlayer target = null;
         int maxVoted = 0;
         Collections.shuffle(players);
+        main.consoleLog("=====VOTE RESULT=====");
         for (GamePlayer participant : players) {
             main.consoleLog("[Vote] "+participant.getName()+" has "+participant.getVoteCount()+" votes");
             if(participant.getVoteCount()>maxVoted){
@@ -301,12 +304,14 @@ public class Game {
             sendMessage("§e"+target.getName()+"§fが追放された");
             main.consoleLog("Day "+dayCount+": "+target.getName()+" has been kicked");
         }
+        main.consoleLog("=========");
     }
 
     public void kill(){
+        main.consoleLog("=====KILL=====");
         ArrayList<GamePlayer> targets = new ArrayList<>();
-        for (GamePlayer participant : participants) {
-            if(participant.getRole().equals(Role.WOLF) && participant.isAlive() && participant.getActionTarget().isAlive()){
+        for (GamePlayer participant : getAlivePlayers()) {
+            if(participant.getRole().equals(Role.WOLF) && participant.isAlive() && participant.getActionTarget()!=null && participant.getActionTarget().isAlive()){
                 targets.add(participant.getActionTarget());
             }
         }
@@ -325,5 +330,14 @@ public class Game {
             sendMessage("§a昨晩の犠牲者はいなかった");
             main.consoleLog("Day "+dayCount+": no one has been killed tonight");
         }
+        main.consoleLog("=========");
+    }
+
+    public ArrayList<GamePlayer> getAlivePlayers(){
+        ArrayList<GamePlayer> surviver = new ArrayList<>();
+        for (GamePlayer participant : participants) {
+            if(participant.isAlive()) surviver.add(participant);
+        }
+        return surviver;
     }
 }
