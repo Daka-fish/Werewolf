@@ -5,9 +5,20 @@ api-version: '1.20'
 description: "werewolf v1.0 !!!!!"
 commands:
   start:
+    permission: "ww.op"
   finish:
+    permission: "ww.op"
   add:
+    permission: "ww.op"
   action:
+    permission: "ww.every"
   time:
+    permission: "ww.op"
   role:
+    permission: "ww.op"
+permissions:
+  ww.op:
+    default: op
+  ww.every:
+    default: true
 
