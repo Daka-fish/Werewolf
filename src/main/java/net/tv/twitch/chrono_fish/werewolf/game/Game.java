@@ -121,10 +121,8 @@ public class Game {
     public void sendMessage(String message){participants.forEach(gamePlayer -> gamePlayer.sendMessage("[GM] "+message));}
 
     public void wolfBroadCast(Component message){
-        for (GamePlayer participant : participants) {
-            if(participant.getRole().equals(Role.WOLF)){
-                participant.sendMessage(Component.text("§c[Wolf chat]§f ").append(message));
-            }
+        for (GamePlayer participant : getTeamPlayers(1)) {
+            participant.sendMessage(Component.text("§c[人狼チャット]§f ").append(message));
         }
     }
 
@@ -269,18 +267,25 @@ public class Game {
                 break;
 
             case NIGHT:
-                if(getDayCount()!=0){
-                    kill();
-                }
+                setDayCount(getDayCount()+1);
+                if(dayCount !=1) kill();
                 checkWin();
                 setCurrentTime(TimeZone.DAY);
-                setDayCount(getDayCount()+1);
 
                 participants.forEach(gamePlayer -> {
                     gamePlayer.setHasVoted(false);
                     gamePlayer.setVoteCount(0);
                     gamePlayer.setHasActioned(false);
                     gamePlayer.setProtected(false);
+                    if(dayCount==1 && gamePlayer.getRole().equals(Role.SEER)){
+                        ArrayList<GamePlayer> whites = getTeamPlayers(0);
+                        if(!whites.isEmpty()){
+                            whites.remove(gamePlayer);
+                            Collections.shuffle(whites);
+                            GamePlayer target = whites.get(0);
+                            gamePlayer.sendMessage("§f[初日占い] §e"+target.getName()+"§fは"+((target.getRole().getTeam()!=1) ? "§a白" : "§c黒")+"§fです");
+                        }
+                    }
                 });
                 break;
         }
@@ -356,5 +361,13 @@ public class Game {
             if(participant.isAlive()) surviver.add(participant);
         }
         return surviver;
+    }
+
+    public ArrayList<GamePlayer> getTeamPlayers(int team_number){
+        ArrayList<GamePlayer> teamPlayers = new ArrayList<>();
+        for (GamePlayer participant : participants) {
+            if(participant.getRole().getTeam()==team_number) teamPlayers.add(participant);
+        }
+        return teamPlayers;
     }
 }
