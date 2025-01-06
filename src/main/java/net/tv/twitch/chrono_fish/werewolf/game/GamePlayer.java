@@ -65,7 +65,6 @@ public class GamePlayer {
     public void sendMessage(String message){if(player != null)player.sendMessage(message);}
     public void sendMessage(Component message){if(player != null)player.sendMessage(message);}
 
-    //どこで使うか決める
     public void sendActionBar(String message){if(player!=null)player.sendActionBar(Component.text(message));}
 
     public void openInventory(Inventory inventory){if(player!=null)player.openInventory(inventory);}
@@ -126,7 +125,7 @@ public class GamePlayer {
                         if(!hasActioned){
                             setActionTarget(gamePlayer);
                             setHasActioned(true);
-                            sendMessage("§e"+gamePlayer.getName()+"§fは"+((gamePlayer.getRole().getTeam()!=1) ? "§e白" : "§c黒")+"§fです");
+                            sendMessage("§e"+gamePlayer.getName()+"§fは"+((gamePlayer.getRole().getTeam()!=1) ? "§a白" : "§c黒")+"§fです");
                         }else{
                             sendActionBar("§c既に行動しました");
                         }
@@ -152,7 +151,7 @@ public class GamePlayer {
                         if(!hasActioned){
                             setActionTarget(gamePlayer);
                             setHasActioned(true);
-                            sendMessage("§e"+gamePlayer.getName()+"§fは"+((gamePlayer.getRole().getTeam()!=1) ? "§e白" : "§c黒")+"§fです");
+                            sendMessage("§e"+gamePlayer.getName()+"§fは"+((gamePlayer.getRole().getTeam()!=1) ? "§a白" : "§c黒")+"§fです");
                         }else{
                             sendActionBar("§c既に行動しました");
                         }
