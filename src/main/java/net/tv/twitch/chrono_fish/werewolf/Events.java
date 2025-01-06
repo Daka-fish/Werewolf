@@ -27,6 +27,7 @@ public class Events implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent e){
+        e.joinMessage(Component.text(""));
         new GamePlayer(e.getPlayer(),game);
     }
 
