@@ -14,8 +14,11 @@ public final class Main extends JavaPlugin {
     public void onEnable() {
         this.game = new Game(this);
         this.configManager = new ConfigManager(this, game);
+
+        //コマンドの見直し
         getCommand("start").setExecutor(new Commands(this));
         getCommand("add").setExecutor(new Commands(this));
+        getCommand("remove").setExecutor(new Commands(this));
         getCommand("action").setExecutor(new Commands(this));
         getCommand("finish").setExecutor(new Commands(this));
         getCommand("time").setExecutor(new Commands(this));

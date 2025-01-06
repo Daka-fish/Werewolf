@@ -10,6 +10,8 @@ commands:
     permission: "ww.op"
   add:
     permission: "ww.op"
+  remove:
+    permission: "ww.op"
   action:
     permission: "ww.every"
   time:
