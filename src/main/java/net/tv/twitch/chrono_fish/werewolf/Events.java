@@ -1,10 +1,13 @@
 package net.tv.twitch.chrono_fish.werewolf;
 
+import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
 import net.tv.twitch.chrono_fish.werewolf.game.DummyPlayer;
 import net.tv.twitch.chrono_fish.werewolf.game.Game;
 import net.tv.twitch.chrono_fish.werewolf.game.GamePlayer;
 import net.tv.twitch.chrono_fish.werewolf.instance.Action;
+import net.tv.twitch.chrono_fish.werewolf.instance.Role;
+import net.tv.twitch.chrono_fish.werewolf.instance.TimeZone;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -96,6 +99,31 @@ public class Events implements Listener {
                     gamePlayer.openInventory(game.getCustomInventory().getActionInventory(Action.SEE_DEAD));
                     break;
             }
+        }
+    }
+
+    @EventHandler
+    public void onChat(AsyncChatEvent e){
+        if(!game.isRunning()) return;
+        Component message = e.message();
+        GamePlayer gamePlayer = game.getGamePlayer(e.getPlayer());
+        if(!gamePlayer.isAlive()){
+            e.setCancelled(true);
+            gamePlayer.sendActionBar("§cあなたは死亡しました。発言はできません");
+            return;
+        }
+        if(game.getCurrentTime().equals(TimeZone.NIGHT)){
+            if(gamePlayer.getPlayer() == null) return;
+            e.setCancelled(true);
+            if(gamePlayer.getRole().equals(Role.WOLF)){
+                game.wolfBroadCast(message);
+            }else{
+                gamePlayer.sendActionBar("§c夜の間は発言できません");
+            }
+        }else{
+            e.setCancelled(true);
+            game.getParticipants().forEach(participant ->
+                    participant.sendMessage(Component.text("["+gamePlayer.getName()+"] ").append(message)));
         }
     }
 }

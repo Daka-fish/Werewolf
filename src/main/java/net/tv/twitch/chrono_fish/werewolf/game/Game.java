@@ -88,7 +88,6 @@ public class Game {
         participants.add(gamePlayer);
         sendMessage("§e"+gamePlayer.getName()+"§fが参加しました");
     }
-
     public void leave(GamePlayer gamePlayer){
         participants.remove(gamePlayer);
         gameBossBar.hideBossBar(gamePlayer);
@@ -101,7 +100,6 @@ public class Game {
         dummyPlayers.add(cpu);
         sendMessage("§e"+cpu.getName()+"§fが参加しました(cpu)");
     }
-
     public void removeCpu(){
         if(dummyPlayers.size()>0){
             DummyPlayer cpu = dummyPlayers.get(dummyPlayers.size()-1);
@@ -115,13 +113,20 @@ public class Game {
         roles.add(role);
         Collections.sort(roles);
     }
-
     public void removeRole(Role role){
         roles.remove(role);
         Collections.sort(roles);
     }
 
-    public void sendMessage(String message){participants.forEach(gamePlayer -> gamePlayer.sendMessage("[人狼]"+message));}
+    public void sendMessage(String message){participants.forEach(gamePlayer -> gamePlayer.sendMessage("[GM] "+message));}
+
+    public void wolfBroadCast(Component message){
+        for (GamePlayer participant : participants) {
+            if(participant.getRole().equals(Role.WOLF)){
+                participant.sendMessage(Component.text("§c[Wolf chat]§f ").append(message));
+            }
+        }
+    }
 
     public GamePlayer getGamePlayer(Player player){
         for (GamePlayer participant : participants) {
