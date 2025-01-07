@@ -4,19 +4,17 @@ main: net.tv.twitch.chrono_fish.werewolf.Main
 api-version: '1.20'
 description: "werewolf v1.0 !!!!!"
 commands:
-  start:
+  game:
     permission: "ww.op"
-  finish:
+  cpu:
     permission: "ww.op"
-  add:
+  timezone:
     permission: "ww.op"
-  remove:
+  role:
     permission: "ww.op"
   action:
     permission: "ww.every"
-  time:
-    permission: "ww.op"
-  role:
+  ww:
     permission: "ww.op"
 permissions:
   ww.op:
