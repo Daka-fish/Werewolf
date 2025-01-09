@@ -10,6 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class Game {
 
@@ -27,9 +28,10 @@ public class Game {
     private TimeZone currentTime;
 
     private final GameBossBar gameBossBar;
-    private final GameScoreboard gameScoreboard;
 
     private int winner_team;
+
+    private final HashMap<GamePlayer, GameScoreboard> scoreboardHashMap;
 
     public Game(Main main){
         this.main = main;
@@ -40,9 +42,9 @@ public class Game {
         this.roles = new ArrayList<>();
         this.dayCount = 0;
         this.currentTime = TimeZone.WAITING;
+        this.scoreboardHashMap = new HashMap<>();
 
         gameBossBar = new GameBossBar();
-        gameScoreboard = new GameScoreboard();
         gameBossBar.setBossBar(currentTime);
     }
 
@@ -63,12 +65,7 @@ public class Game {
     public void setRoles(ArrayList<Role> roles) {this.roles = roles;}
 
     public int getDayCount() {return dayCount;}
-    public void setDayCount(int dayCount) {
-        if(isRunning){
-            this.dayCount = dayCount;
-            sendMessage("§e"+dayCount+"§f日目になりました");
-        }
-    }
+    public void setDayCount(int dayCount) {if(isRunning){this.dayCount = dayCount;}}
 
     public TimeZone getCurrentTime() {return currentTime;}
     public void setCurrentTime(TimeZone currentTime) {
@@ -86,11 +83,14 @@ public class Game {
 
     public void join(GamePlayer gamePlayer){
         participants.add(gamePlayer);
+        scoreboardHashMap.put(gamePlayer, new GameScoreboard(this, gamePlayer));
         sendMessage("§e"+gamePlayer.getName()+"§fが参加しました");
     }
+
     public void leave(GamePlayer gamePlayer){
         participants.remove(gamePlayer);
         gameBossBar.hideBossBar(gamePlayer);
+        scoreboardHashMap.remove(gamePlayer).remove();
         sendMessage("§e"+gamePlayer.getName()+"§fが退室しました");
     }
 
@@ -100,6 +100,7 @@ public class Game {
         dummyPlayers.add(cpu);
         sendMessage("§e"+cpu.getName()+"§fが参加しました(cpu)");
     }
+
     public void removeCpu(){
         if(dummyPlayers.size()>0){
             DummyPlayer cpu = dummyPlayers.get(dummyPlayers.size()-1);
@@ -169,9 +170,13 @@ public class Game {
                 participant.setAlive(true);
                 gameBossBar.setBossBar(currentTime);
                 gameBossBar.showBossBar(participant);
-                gameScoreboard.addBoard(participant);
-                gameScoreboard.resetRole(participant);
-                gameScoreboard.show(participant);
+                if(scoreboardHashMap.containsKey(participant)){
+                    GameScoreboard gameScoreboard = scoreboardHashMap.get(participant);
+                    gameScoreboard.setBoard();
+                    gameScoreboard.removeScores();
+                    gameScoreboard.setScore();
+                    gameScoreboard.show();
+                }
             });
 
             timer = new Timer(this);
@@ -200,7 +205,6 @@ public class Game {
             gameBossBar.setBossBar(TimeZone.WAITING);
             gameBossBar.setTime((float) 1);
             gameBossBar.hideBossBar(participant);
-            gameScoreboard.remove(participant);
             message.append("\n")
                     .append(participant.getName())
                     .append(" : ")
@@ -287,6 +291,7 @@ public class Game {
                         }
                     }
                 });
+                if(isRunning) sendMessage("§e"+dayCount+"§f日目になりました");
                 break;
         }
         if(isRunning){
